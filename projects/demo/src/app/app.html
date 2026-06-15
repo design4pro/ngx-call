@@ -1,0 +1,27 @@
+<main>
+  <section class="workspace" aria-labelledby="demo-title">
+    <header>
+      <p class="eyebrow">Angular Signals library demo</p>
+      <h1 id="demo-title">ngx-call</h1>
+      <p class="summary">
+        Imperative UI calls rendered by Angular components and resolved with promises.
+      </p>
+    </header>
+
+    <div class="actions" aria-label="Demo actions">
+      <button type="button" (click)="askForConfirmation()">Open confirm</button>
+      <button type="button" (click)="showSingletonToast()">Upsert toast</button>
+      <button type="button" (click)="showProgressToast()">Update in flight</button>
+      <button type="button" (click)="runMutationFlow()">Mutation flow</button>
+    </div>
+
+    <section class="status" aria-live="polite">
+      <span>Last result</span>
+      <strong>{{ lastResult() }}</strong>
+    </section>
+  </section>
+</main>
+
+<ngx-call-host [callable]="Confirm" [root]="root()" />
+<ngx-call-host [callable]="Toast" [root]="root()" />
+<ngx-call-host [callable]="MutationConfirm" [root]="root()" />

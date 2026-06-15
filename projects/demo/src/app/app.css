@@ -1,0 +1,128 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  color: #101827;
+  background:
+    linear-gradient(135deg, rgb(240 253 250 / 72%), transparent 46%),
+    linear-gradient(315deg, rgb(254 249 195 / 70%), transparent 42%), #f8fafc;
+}
+
+main {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  padding: 32px;
+}
+
+.workspace {
+  width: min(760px, 100%);
+}
+
+header {
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: #0f766e;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.summary {
+  max-width: 560px;
+  margin: 18px 0 0;
+  color: #475569;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+button {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid #101827;
+  border-radius: 6px;
+  background: #101827;
+  color: white;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+button:nth-child(2) {
+  border-color: #164e63;
+  background: #164e63;
+}
+
+button:nth-child(3) {
+  border-color: #854d0e;
+  background: #854d0e;
+}
+
+button:nth-child(4) {
+  border-color: #365314;
+  background: #365314;
+}
+
+button:hover {
+  filter: brightness(1.08);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: white;
+}
+
+.status span {
+  color: #64748b;
+}
+
+.status strong {
+  text-align: right;
+}
+
+@media (max-width: 560px) {
+  main {
+    align-items: start;
+    padding: 24px 16px;
+  }
+
+  .status {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .status strong {
+    text-align: left;
+  }
+}
