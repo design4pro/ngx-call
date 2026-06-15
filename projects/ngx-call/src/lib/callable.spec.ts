@@ -85,7 +85,7 @@ describe('createCallable + NgxCallHost', () => {
     await expect(promise).resolves.toBe(true);
   });
 
-  it('updates targeted call props and root props through signals', () => {
+  it('updates targeted call props and root props through signals', async () => {
     const Confirm = createCallable<{ message: string }, boolean, DialogRoot>(TestDialog, {
       inputs: ['message'],
     });
@@ -112,9 +112,12 @@ describe('createCallable + NgxCallHost', () => {
 
     expect(text(fixture, '[data-testid="message"]')).toBe('Two');
     expect(text(fixture, '[data-testid="root"]')).toBe('Hi Grace');
+
+    Confirm.end(promise, false);
+    await expect(promise).resolves.toBe(false);
   });
 
-  it('updates all active calls when update() is called without a target', () => {
+  it('updates all active calls when update() is called without a target', async () => {
     const Confirm = createCallable<{ message: string }, boolean, DialogRoot>(TestDialog, {
       inputs: ['message'],
     });
@@ -132,14 +135,17 @@ describe('createCallable + NgxCallHost', () => {
     const fixture = TestBed.createComponent(HostFixture);
     fixture.detectChanges();
 
-    Confirm.call({ message: 'One' });
-    Confirm.call({ message: 'Two' });
+    const first = Confirm.call({ message: 'One' });
+    const second = Confirm.call({ message: 'Two' });
     fixture.detectChanges();
 
     Confirm.update({ message: 'Updated' });
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelectorAll('[aria-label="Updated"]')).toHaveLength(2);
+
+    Confirm.end(false);
+    await expect(Promise.all([first, second])).resolves.toEqual([false, false]);
   });
 
   it('upsert creates one singleton call and updates it until it ends', async () => {
@@ -178,6 +184,41 @@ describe('createCallable + NgxCallHost', () => {
 
     expect(third).not.toBe(first);
     Toast.end(third, true);
+    await expect(third).resolves.toBe(true);
+  });
+
+  it('rejects active call promises when the last host is destroyed', async () => {
+    const Confirm = createCallable<{ message: string }, boolean, DialogRoot>(TestDialog, {
+      inputs: ['message'],
+    });
+
+    @Component({
+      standalone: true,
+      imports: [NgxCallHost],
+      template: `<ngx-call-host [callable]="Confirm" [root]="root()" />`,
+    })
+    class HostFixture {
+      readonly Confirm = Confirm;
+      readonly root = signal<DialogRoot>({ user: 'Ada' });
+    }
+
+    const fixture = TestBed.createComponent(HostFixture);
+    fixture.detectChanges();
+
+    const callPromise = Confirm.call({ message: 'Call' });
+    const upsertPromise = Confirm.upsert({ message: 'Upsert' });
+    const callAssertion = expect(callPromise).rejects.toThrow(
+      '<ngx-call-host> was destroyed before the call completed.',
+    );
+    const upsertAssertion = expect(upsertPromise).rejects.toThrow(
+      '<ngx-call-host> was destroyed before the call completed.',
+    );
+
+    fixture.destroy();
+
+    await callAssertion;
+    await upsertAssertion;
+    expect(Confirm.stack()).toHaveLength(0);
   });
 
   it('marks a call as ended before removing it after the unmounting delay', async () => {
@@ -199,10 +240,12 @@ describe('createCallable + NgxCallHost', () => {
     const fixture = TestBed.createComponent(HostFixture);
     fixture.detectChanges();
 
-    Confirm.call({ message: 'Exit' });
+    const promise = Confirm.call({ message: 'Exit' });
     fixture.detectChanges();
     Confirm.end(false);
     fixture.detectChanges();
+
+    await expect(promise).resolves.toBe(false);
 
     expect(fixture.nativeElement.querySelector('[role="dialog"]').dataset.ended).toBe('true');
 
@@ -212,7 +255,7 @@ describe('createCallable + NgxCallHost', () => {
     expect(fixture.nativeElement.querySelector('[role="dialog"]')).toBeNull();
   });
 
-  it('keeps calls created after end-all in the same tick', () => {
+  it('keeps calls created after end-all in the same tick', async () => {
     const Confirm = createCallable<{ message: string }, boolean, DialogRoot>(TestDialog, {
       inputs: ['message'],
       unmountingDelay: 5,
@@ -231,13 +274,16 @@ describe('createCallable + NgxCallHost', () => {
     const fixture = TestBed.createComponent(HostFixture);
     fixture.detectChanges();
 
-    Confirm.call({ message: 'Before' });
+    const before = Confirm.call({ message: 'Before' });
     Confirm.end(false);
-    Confirm.call({ message: 'After' });
+    const after = Confirm.call({ message: 'After' });
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelector('[aria-label="Before"]').dataset.ended).toBe('true');
     expect(fixture.nativeElement.querySelector('[aria-label="After"]').dataset.ended).toBe('false');
+
+    Confirm.end(after, true);
+    await expect(Promise.all([before, after])).resolves.toEqual([false, true]);
   });
 
   it('throws when more than one host is mounted for a callable', () => {
@@ -287,6 +333,36 @@ describe('createCallable + NgxCallHost', () => {
     fixture.detectChanges();
 
     await expect(promise).resolves.toBeUndefined();
+  });
+
+  it('keeps void props undefined when update and upsert receive no patch', async () => {
+    const Done = createCallable<void, void>(TestVoidDialog);
+
+    @Component({
+      standalone: true,
+      imports: [NgxCallHost],
+      template: `<ngx-call-host [callable]="Done" />`,
+    })
+    class HostFixture {
+      readonly Done = Done;
+    }
+
+    const fixture = TestBed.createComponent(HostFixture);
+    fixture.detectChanges();
+
+    const callPromise = Done.call();
+    Done.update();
+    expect(Done.stack()[0]!.props()).toBeUndefined();
+    Done.end(callPromise, undefined);
+    await expect(callPromise).resolves.toBeUndefined();
+
+    const upsertPromise = Done.upsert();
+    const updatedUpsertPromise = Done.upsert();
+    expect(updatedUpsertPromise).toBe(upsertPromise);
+    const upsertItem = Done.stack()[Done.stack().length - 1]!;
+    expect(upsertItem.props()).toBeUndefined();
+    Done.end(undefined);
+    await expect(upsertPromise).resolves.toBeUndefined();
   });
 
   it('throws a client-only error when call() runs without a browser document', () => {

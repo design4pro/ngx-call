@@ -80,4 +80,28 @@ describe('createMutationFlow', () => {
     expect(submit.pending()).toBe(false);
     expect(call.end).not.toHaveBeenCalled();
   });
+
+  it('clears pending and allows another run when mutationFn throws synchronously', async () => {
+    const call = { end: vi.fn<(response: boolean) => void>() };
+    const mutationFn: MutationFn<boolean> = vi
+      .fn()
+      .mockImplementationOnce(() => {
+        throw new Error('failed');
+      })
+      .mockResolvedValueOnce(undefined);
+    const submit = createMutationFlow({ call, mutationFn });
+
+    submit.run();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(submit.pending()).toBe(false);
+
+    submit.run();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(mutationFn).toHaveBeenCalledTimes(2);
+    expect(submit.pending()).toBe(false);
+  });
 });

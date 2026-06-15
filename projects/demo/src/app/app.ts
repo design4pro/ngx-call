@@ -426,7 +426,9 @@ type ToastProps = { message: string; detail: string; tone: ToastTone };
       [class.error]="tone() === 'error'"
       [class.warning]="tone() === 'warning'"
       [class.leaving]="call.ended()"
-      role="status"
+      role="region"
+      aria-live="polite"
+      [attr.aria-label]="message()"
       [style.bottom.px]="24 + call.index() * 88"
     >
       <strong>{{ call.stackSize() > 1 ? 'Stacked call' : 'Notification' }}</strong>

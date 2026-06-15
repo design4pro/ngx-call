@@ -6,7 +6,20 @@ The `demo` app is a static landing page and live playground for the library.
 
 ## Development server
 
-To start a local development server, run:
+The demo imports `ngx-call` from `dist/ngx-call`, so build the library before serving a
+fresh checkout:
+
+```bash
+npx ng build ngx-call
+```
+
+For active demo work, keep the library build running in watch mode:
+
+```bash
+npx ng build ngx-call --configuration development --watch
+```
+
+In another terminal, start the demo development server:
 
 ```bash
 npm start -- --project demo

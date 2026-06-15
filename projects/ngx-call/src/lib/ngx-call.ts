@@ -77,6 +77,7 @@ interface InternalCallItem<Props, Response, RootProps> extends CallStackItem<
 > {
   readonly promise: Promise<Response>;
   readonly resolve: (response: Response) => void;
+  readonly reject: (reason: unknown) => void;
   readonly endedState: WritableSignal<boolean>;
   readonly propsState: WritableSignal<Props>;
 }
@@ -137,7 +138,7 @@ export function createCallable<Props, Response, RootProps>(
       if (!hostRoots.size) {
         nextKey = 0;
         upsertPromise = null;
-        stack.set([]);
+        rejectPendingCalls();
       }
     };
   };
@@ -176,8 +177,10 @@ export function createCallable<Props, Response, RootProps>(
     configureEnd?: (promise: Promise<Response>) => (response: Response) => void,
   ) => {
     let resolve!: (response: Response) => void;
-    const promise = new Promise<Response>((res) => {
+    let reject!: (reason: unknown) => void;
+    const promise = new Promise<Response>((res, rej) => {
       resolve = res;
+      reject = rej;
     });
     const key = String(nextKey++);
     const endedState = signal(false);
@@ -196,6 +199,7 @@ export function createCallable<Props, Response, RootProps>(
       key,
       promise,
       resolve,
+      reject,
       endedState,
       propsState,
       props: propsState.asReadonly(),
@@ -247,16 +251,26 @@ export function createCallable<Props, Response, RootProps>(
   }) as UpdateFunction<Props, Response>;
 
   const updateProps = (promise: Promise<Response> | null, patch: Partial<Props> | undefined) => {
-    const safePatch = (patch ?? {}) as Partial<Props>;
+    if (patch === undefined) return;
 
     stack.update((items) =>
       items.map((item) => {
         if (promise && item.promise !== promise) return item;
 
-        item.propsState.set(mergeProps(item.propsState(), safePatch));
+        item.propsState.set(mergeProps(item.propsState(), patch));
         return item;
       }),
     );
+  };
+
+  const rejectPendingCalls = () => {
+    const reason = new Error('<ngx-call-host> was destroyed before the call completed.');
+
+    for (const item of stack()) {
+      item.endedState.set(true);
+      item.reject(reason);
+    }
+    stack.set([]);
   };
 
   const callable = {
@@ -359,9 +373,8 @@ export class NgxCallHost {
   }
 
   private clearRefs(): void {
-    for (const ref of this.refs.values()) ref.destroy();
-    this.refs.clear();
     this.viewContainer.clear();
+    this.refs.clear();
   }
 }
 
@@ -410,7 +423,14 @@ export function createMutationFlow<Response, Payload = void>({
     inFlight = true;
     pending.set(true);
 
-    void Promise.resolve(mutationFn(call, payload))
+    let mutation: Promise<void>;
+    try {
+      mutation = Promise.resolve(mutationFn(call, payload));
+    } catch {
+      mutation = Promise.reject();
+    }
+
+    void mutation
       .catch(() => undefined)
       .finally(() => {
         inFlight = false;
