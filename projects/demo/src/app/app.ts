@@ -28,14 +28,15 @@ type ConfirmProps = { message: string };
   styles: `
     .dialog {
       position: fixed;
+      z-index: 50;
       inset: auto 24px 24px auto;
       width: min(380px, calc(100vw - 48px));
       padding: 20px;
-      border: 1px solid #273244;
+      border: 1px solid #d9e0ea;
       border-radius: 8px;
-      background: #f8fafc;
-      box-shadow: 0 20px 60px rgb(15 23 42 / 20%);
-      color: #101827;
+      background: #ffffff;
+      box-shadow: 0 24px 70px rgb(17 24 39 / 18%);
+      color: #111827;
       transition:
         opacity 180ms ease,
         transform 180ms ease;
@@ -48,8 +49,9 @@ type ConfirmProps = { message: string };
 
     .dialog-kicker {
       margin: 0 0 8px;
-      color: #596275;
+      color: #05865c;
       font-size: 0.82rem;
+      font-weight: 760;
     }
 
     h2 {
@@ -70,17 +72,19 @@ type ConfirmProps = { message: string };
     button {
       min-height: 36px;
       padding: 0 14px;
-      border: 1px solid #101827;
+      border: 1px solid #05865c;
       border-radius: 6px;
-      background: #101827;
+      background: #05865c;
       color: white;
       font: inherit;
+      font-weight: 720;
       cursor: pointer;
     }
 
     button.secondary {
       background: white;
-      color: #101827;
+      color: #111827;
+      border-color: #d9e0ea;
     }
   `,
 })
@@ -109,17 +113,18 @@ type ToastProps = { message: string };
   styles: `
     .toast {
       position: fixed;
+      z-index: 50;
       right: 24px;
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 4px 12px;
       width: min(360px, calc(100vw - 48px));
       padding: 14px 16px;
-      border: 1px solid #164e63;
+      border: 1px solid #b9e7d7;
       border-radius: 8px;
-      background: #ecfeff;
-      color: #0f172a;
-      box-shadow: 0 16px 44px rgb(8 47 73 / 18%);
+      background: #f0fdf4;
+      color: #111827;
+      box-shadow: 0 18px 54px rgb(5 134 92 / 16%);
       transition:
         opacity 180ms ease,
         transform 180ms ease;
@@ -141,11 +146,12 @@ type ToastProps = { message: string };
       align-self: center;
       min-height: 32px;
       padding: 0 10px;
-      border: 1px solid #164e63;
+      border: 1px solid #05865c;
       border-radius: 6px;
       background: white;
-      color: #164e63;
+      color: #05865c;
       font: inherit;
+      font-weight: 720;
       cursor: pointer;
     }
   `,
@@ -186,20 +192,22 @@ type MutationConfirmProps = {
   styles: `
     .dialog {
       position: fixed;
+      z-index: 50;
       inset: auto auto 24px 24px;
       width: min(380px, calc(100vw - 48px));
       padding: 20px;
-      border: 1px solid #365314;
+      border: 1px solid #d9e0ea;
       border-radius: 8px;
-      background: #f7fee7;
-      box-shadow: 0 20px 60px rgb(63 98 18 / 20%);
-      color: #17210c;
+      background: #ffffff;
+      box-shadow: 0 24px 70px rgb(17 24 39 / 18%);
+      color: #111827;
     }
 
     .dialog-kicker {
       margin: 0 0 8px;
-      color: #4d5f2a;
+      color: #6f49c7;
       font-size: 0.82rem;
+      font-weight: 760;
     }
 
     h2 {
@@ -220,17 +228,19 @@ type MutationConfirmProps = {
     button {
       min-height: 36px;
       padding: 0 14px;
-      border: 1px solid #365314;
+      border: 1px solid #6f49c7;
       border-radius: 6px;
-      background: #365314;
+      background: #6f49c7;
       color: white;
       font: inherit;
+      font-weight: 720;
       cursor: pointer;
     }
 
     button.secondary {
       background: white;
-      color: #365314;
+      color: #111827;
+      border-color: #d9e0ea;
     }
 
     button:disabled {

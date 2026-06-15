@@ -8,6 +8,8 @@
 
 # Node
 /node_modules
+.a5c/node_modules/
+.a5c/runs/
 npm-debug.log
 yarn-error.log
 
