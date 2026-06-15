@@ -4,6 +4,14 @@ Angular workspace for `ngx-call`, an awaitable UI call helper for Angular compon
 
 The `demo` app is a static landing page and live playground for the library.
 
+## Install
+
+`ngx-call` is published to GitHub Packages as `@design4pro/ngx-call`:
+
+```bash
+npm install @design4pro/ngx-call
+```
+
 ## Development server
 
 The demo imports `ngx-call` from `dist/ngx-call`, so build the library before serving a
@@ -49,7 +57,7 @@ The repository includes `.github/workflows/deploy-pages.yml`. To publish:
 
 1. In GitHub, set **Settings → Pages → Source** to **GitHub Actions**.
 2. Push to `main` or run the workflow manually.
-3. The workflow installs dependencies, builds `demo`, uploads `dist/demo/browser`, and deploys it to Pages.
+3. The workflow installs dependencies, builds `ngx-call`, builds `demo`, uploads `dist/demo/browser`, and deploys it to Pages.
 
 ## Library build
 

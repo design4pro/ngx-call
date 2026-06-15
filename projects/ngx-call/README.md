@@ -9,7 +9,7 @@ menus, pickers, and short wizards.
 ## Install
 
 ```bash
-npm install ngx-call
+npm install @design4pro/ngx-call
 ```
 
 Peer dependency:
@@ -28,7 +28,7 @@ Peer dependency:
 
 ```ts
 import { Component, input } from '@angular/core';
-import { createCallable, injectCall } from 'ngx-call';
+import { createCallable, injectCall } from '@design4pro/ngx-call';
 
 type ConfirmProps = { message: string };
 type ConfirmResponse = boolean;
@@ -62,7 +62,7 @@ metadata.
 
 ```ts
 import { Component, signal } from '@angular/core';
-import { NgxCallHost } from 'ngx-call';
+import { NgxCallHost } from '@design4pro/ngx-call';
 import { Confirm } from './confirm-dialog';
 
 @Component({
@@ -130,7 +130,7 @@ Use `createMutationFlow` when the call submits async work and should stay open o
 failure.
 
 ```ts
-import { createMutationFlow, type MutationFn } from 'ngx-call';
+import { createMutationFlow, type MutationFn } from '@design4pro/ngx-call';
 
 type Props = {
   mutationFn: MutationFn<boolean>;

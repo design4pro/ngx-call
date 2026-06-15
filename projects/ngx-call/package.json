@@ -1,6 +1,14 @@
 {
-  "name": "ngx-call",
+  "name": "@design4pro/ngx-call",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/design4pro/ngx-call.git",
+    "directory": "projects/ngx-call"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "peerDependencies": {
     "@angular/core": ">=20.0.0 <23.0.0"
   },

@@ -35,6 +35,9 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
+      - name: Build library
+        run: npx ng build ngx-call
+
       - name: Build demo
         run: npx ng build demo --configuration production --base-href "/${{ github.event.repository.name }}/"
 
