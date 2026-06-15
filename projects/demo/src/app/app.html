@@ -1,0 +1,331 @@
+<main class="site-shell bg-ngx-surface text-ngx-text">
+  <nav class="topbar" aria-label="Primary navigation">
+    <a class="brand" href="#top" aria-label="ngx-call home">
+      <span class="brand-mark" aria-hidden="true">ngx</span>
+      <span>ngx-call</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#examples">Examples</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#stack">Stack</a>
+      <a href="https://github.com/design4pro/ngx-call" rel="noreferrer" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <section id="top" class="hero section-grid" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <h1 id="hero-title">
+        <span>ngx-call</span>
+        <span>Your Angular component can await.</span>
+      </h1>
+      <p class="hero-summary">
+        Turn standalone Angular components into promise-returning calls for confirmations, toasts,
+        pickers, drawers, and mutation flows.
+      </p>
+
+      <div class="hero-actions" aria-label="Primary demo actions">
+        <button type="button" class="button primary" (click)="askForConfirmation()">
+          Try confirm
+        </button>
+        <a class="button secondary" href="#examples">View examples</a>
+      </div>
+
+      <p class="hero-note">Signals-first. SSR-safe host. No overlay dependency.</p>
+    </div>
+
+    <div class="hero-demo" aria-label="Live confirm demo preview">
+      <div class="demo-stage">
+        <div class="stage-topline">
+          <span>Angular signal flow</span>
+          <strong>resolve(true)</strong>
+        </div>
+
+        <div class="install-line" aria-label="Install command">
+          <div class="package-tabs" aria-hidden="true">
+            <span>npm</span>
+            <span>pnpm</span>
+            <span>yarn</span>
+            <span>bun</span>
+          </div>
+          <code>$ npm install ngx-call</code>
+        </div>
+
+        <div class="window-header">
+          <span>Live demo: Confirm</span>
+          <button type="button" class="text-button" (click)="askForConfirmation()">Open</button>
+        </div>
+
+        <div class="confirm-preview">
+          <div>
+            <strong>Continue the Angular flow?</strong>
+            <span>Promise resolves from the rendered component.</span>
+          </div>
+          <div class="file-icon" aria-hidden="true">call()</div>
+        </div>
+
+        <div class="preview-actions" aria-hidden="true">
+          <span>Cancel</span>
+          <span>Continue</span>
+        </div>
+
+        <div class="flow-rail" aria-hidden="true">
+          <span>call()</span>
+          <span>render</span>
+          <span>resolve</span>
+        </div>
+
+        <div class="result-strip" aria-live="polite">
+          <span>Last result</span>
+          <strong>{{ lastResult() }}</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="examples" class="examples-section" aria-labelledby="examples-title">
+    <div class="section-heading">
+      <h2 id="examples-title">Any Angular UI you can await.</h2>
+      <p>
+        Each card opens a real callable component and reports the promise result back to the caller.
+      </p>
+    </div>
+
+    <div class="code-compare" aria-label="Code comparison">
+      <article>
+        <h3>Without ngx-call</h3>
+        <pre><code>openConfirm() &#123;
+  this.show = true;
+&#125;
+
+onConfirm(value: boolean) &#123;
+  this.result = value;
+  this.show = false;
+&#125;</code></pre>
+      </article>
+
+      <article>
+        <h3>With ngx-call</h3>
+        <pre><code>async openConfirm() &#123;
+  const ok = await Confirm.call(&#123;
+    message: 'Continue?'
+  &#125;);
+
+  if (ok) &#123;
+    // Continue the flow.
+  &#125;
+&#125;</code></pre>
+      </article>
+    </div>
+
+    <div class="filter-row" aria-label="Example filters">
+      @for (filter of filters; track filter) {
+        <button
+          type="button"
+          class="filter-chip"
+          [class.active]="selectedFilter() === filter"
+          (click)="selectedFilter.set(filter)"
+        >
+          {{ filter }}
+        </button>
+      }
+    </div>
+
+    <div class="example-catalog">
+      @for (example of visibleExamples(); track example.id) {
+        <article class="example-card">
+          <div class="example-card-top">
+            <span class="category-label">{{ example.category }}</span>
+            <div class="behavior-list" aria-label="Behaviors">
+              @for (behavior of example.behaviors; track behavior) {
+                <span>{{ behavior }}</span>
+              }
+            </div>
+          </div>
+          <h3>{{ example.title }}</h3>
+          <p>{{ example.description }}</p>
+          <button type="button" class="inline-action" (click)="runExample(example.id, $event)">
+            {{ example.action }}
+          </button>
+        </article>
+      }
+    </div>
+
+    <p class="example-count">{{ visibleExamples().length }} of {{ examples.length }} examples</p>
+  </section>
+
+  <section id="how-it-works" class="flow-section" aria-labelledby="flow-title">
+    <div class="section-heading">
+      <h2 id="flow-title">Declared once. Called from anywhere.</h2>
+      <p>
+        The host lives in your Angular tree. The call happens wherever your flow needs an answer.
+      </p>
+    </div>
+
+    <div class="flow-grid">
+      <article>
+        <span>1</span>
+        <h3>Declare</h3>
+        <p>Wrap a standalone component with inputs and a root context.</p>
+      </article>
+      <article>
+        <span>2</span>
+        <h3>Call</h3>
+        <p>Use <code>Confirm.call()</code> and receive a promise immediately.</p>
+      </article>
+      <article>
+        <span>3</span>
+        <h3>Render</h3>
+        <p>The host displays the component and tracks active call state.</p>
+      </article>
+      <article>
+        <span>4</span>
+        <h3>Resolve</h3>
+        <p>The component ends the call with the value the calling flow awaits.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="state-section" aria-labelledby="state-title">
+    <div class="section-heading">
+      <h2 id="state-title">State vs. Await</h2>
+      <p>Awaitable UI replaces scattered open flags with one straight-line flow.</p>
+    </div>
+
+    <div class="state-compare">
+      <ul class="friction-list" aria-label="State driven drawbacks">
+        <li>More code</li>
+        <li>Scattered updates</li>
+        <li>Harder to test</li>
+        <li>Manual cleanup</li>
+      </ul>
+
+      <pre><code>let open = signal(false);
+let answer = signal&lt;boolean | null&gt;(null);
+
+open.set(true);
+
+effect(() =&gt; &#123;
+  if (answer() !== null) &#123;
+    // Continue...
+  &#125;
+&#125;);</code></pre>
+
+      <pre><code>const answer = await Confirm.call(&#123;
+  message: 'Proceed?'
+&#125;);
+
+if (answer) &#123;
+  // Continue...
+&#125;</code></pre>
+
+      <ul class="benefit-list" aria-label="Await driven benefits">
+        <li>Less code</li>
+        <li>Straight-line flow</li>
+        <li>Easier to test</li>
+        <li>No manual cleanup</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="stack" class="stack-section" aria-labelledby="stack-title">
+    <div class="section-heading">
+      <h2 id="stack-title">Live stack demo</h2>
+      <p>Open calls, update them, and see how the shared Angular host behaves.</p>
+    </div>
+
+    <div class="stack-layout">
+      <div class="stack-controls">
+        <div class="control-row">
+          <button type="button" class="button primary compact" (click)="askForConfirmation()">
+            Open Confirm
+          </button>
+          <button type="button" class="button violet compact" (click)="showSingletonToast()">
+            Toast
+          </button>
+          <button type="button" class="button amber compact" (click)="runMutationFlow()">
+            Mutation
+          </button>
+        </div>
+
+        <div class="settings-panel">
+          <h3>Settings</h3>
+          <dl>
+            <div>
+              <dt>Root user</dt>
+              <dd>{{ root().user }}</dd>
+            </div>
+            <div>
+              <dt>Unmount delay</dt>
+              <dd>180ms</dd>
+            </div>
+            <div>
+              <dt>Host</dt>
+              <dd>Shared render outlet</dd>
+            </div>
+            <div>
+              <dt>UI layer</dt>
+              <dd>Custom Tailwind</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <div class="stack-preview" aria-label="Stack anatomy">
+        <div class="stack-row">
+          <span>1</span>
+          <strong>Confirm action</strong>
+          <small>returns boolean</small>
+        </div>
+        <div class="stack-row">
+          <span>2</span>
+          <strong>Toast notification</strong>
+          <small>upsert or update</small>
+        </div>
+        <div class="stack-row">
+          <span>3</span>
+          <strong>Mutation flow</strong>
+          <small>closes after async work</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section" aria-labelledby="cta-title">
+    <div>
+      <h2 id="cta-title">Ready to make Angular UI awaitable?</h2>
+      <p>Install ngx-call and turn modal, toast, and flow components into promises.</p>
+    </div>
+    <div class="cta-actions">
+      <a class="button primary" href="#top">Install</a>
+      <a
+        class="button secondary"
+        href="https://github.com/design4pro/ngx-call"
+        rel="noreferrer"
+        target="_blank"
+      >
+        View docs
+      </a>
+    </div>
+  </section>
+</main>
+
+<ngx-call-host [callable]="Confirm" [root]="root()" />
+<ngx-call-host [callable]="Alert" [root]="root()" />
+<ngx-call-host [callable]="Prompt" [root]="root()" />
+<ngx-call-host [callable]="Nested" [root]="root()" />
+<ngx-call-host [callable]="Toast" [root]="root()" />
+<ngx-call-host [callable]="AutoError" [root]="root()" />
+<ngx-call-host [callable]="MutationConfirm" [root]="root()" />
+<ngx-call-host [callable]="OptionalConfirm" [root]="root()" />
+<ngx-call-host [callable]="AccountDialogCall" [root]="root()" />
+<ngx-call-host [callable]="ItemPicker" [root]="root()" />
+<ngx-call-host [callable]="ColorPicker" [root]="root()" />
+<ngx-call-host [callable]="ContextMenu" [root]="root()" />
+<ngx-call-host [callable]="CommandPalette" [root]="root()" />
+<ngx-call-host [callable]="BottomSheet" [root]="root()" />
+<ngx-call-host [callable]="SettingsDrawer" [root]="root()" />
+<ngx-call-host [callable]="Lightbox" [root]="root()" />
+<ngx-call-host [callable]="Wizard" [root]="root()" />
+<ngx-call-host [callable]="Permission" [root]="root()" />
+<ngx-call-host [callable]="Approval" [root]="root()" />
