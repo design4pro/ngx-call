@@ -1,7 +1,7 @@
-<main class="site-shell">
+<main class="site-shell bg-ngx-surface text-ngx-text">
   <nav class="topbar" aria-label="Primary navigation">
     <a class="brand" href="#top" aria-label="ngx-call home">
-      <span class="brand-mark" aria-hidden="true">A</span>
+      <span class="brand-mark" aria-hidden="true">ngx</span>
       <span>ngx-call</span>
     </a>
 
@@ -9,17 +9,19 @@
       <a href="#examples">Examples</a>
       <a href="#how-it-works">How it works</a>
       <a href="#stack">Stack</a>
-      <a href="https://github.com/desko27/ngx-call" rel="noreferrer" target="_blank">GitHub</a>
+      <a href="https://github.com/design4pro/ngx-call" rel="noreferrer" target="_blank">GitHub</a>
     </div>
   </nav>
 
   <section id="top" class="hero section-grid" aria-labelledby="hero-title">
     <div class="hero-copy">
-      <h1 id="hero-title">ngx-call</h1>
-      <p class="hero-lede">Your Angular component can await</p>
+      <h1 id="hero-title">
+        <span>ngx-call</span>
+        <span>Your Angular component can await.</span>
+      </h1>
       <p class="hero-summary">
-        Open Angular components as promise-returning UI calls. Confirmations, toasts, prompts, and
-        mutation flows stay colocated with the component that renders them.
+        Turn standalone Angular components into promise-returning calls for confirmations, toasts,
+        pickers, drawers, and mutation flows.
       </p>
 
       <div class="hero-actions" aria-label="Primary demo actions">
@@ -29,29 +31,50 @@
         <a class="button secondary" href="#examples">View examples</a>
       </div>
 
-      <div class="install-line" aria-label="Install command">
-        <span aria-hidden="true">&gt;_</span>
-        <code>npm install ngx-call</code>
-      </div>
+      <p class="hero-note">Signals-first. SSR-safe host. No overlay dependency.</p>
     </div>
 
     <div class="hero-demo" aria-label="Live confirm demo preview">
-      <div class="demo-window">
+      <div class="demo-stage">
+        <div class="stage-topline">
+          <span>Angular signal flow</span>
+          <strong>resolve(true)</strong>
+        </div>
+
+        <div class="install-line" aria-label="Install command">
+          <div class="package-tabs" aria-hidden="true">
+            <span>npm</span>
+            <span>pnpm</span>
+            <span>yarn</span>
+            <span>bun</span>
+          </div>
+          <code>$ npm install ngx-call</code>
+        </div>
+
         <div class="window-header">
           <span>Live demo: Confirm</span>
           <button type="button" class="text-button" (click)="askForConfirmation()">Open</button>
         </div>
+
         <div class="confirm-preview">
           <div>
-            <strong>Continue the demo flow?</strong>
-            <span>Resolved from an Angular component.</span>
+            <strong>Continue the Angular flow?</strong>
+            <span>Promise resolves from the rendered component.</span>
           </div>
-          <div class="file-icon" aria-hidden="true">UI</div>
+          <div class="file-icon" aria-hidden="true">call()</div>
         </div>
+
         <div class="preview-actions" aria-hidden="true">
           <span>Cancel</span>
           <span>Continue</span>
         </div>
+
+        <div class="flow-rail" aria-hidden="true">
+          <span>call()</span>
+          <span>render</span>
+          <span>resolve</span>
+        </div>
+
         <div class="result-strip" aria-live="polite">
           <span>Last result</span>
           <strong>{{ lastResult() }}</strong>
@@ -62,10 +85,9 @@
 
   <section id="examples" class="examples-section" aria-labelledby="examples-title">
     <div class="section-heading">
-      <h2 id="examples-title">21 awaitable UI examples</h2>
+      <h2 id="examples-title">Any Angular UI you can await.</h2>
       <p>
-        Dialog, picker, notification, menu, drawer, overlay, and flow examples using Angular
-        components.
+        Each card opens a real callable component and reports the promise result back to the caller.
       </p>
     </div>
 
@@ -134,8 +156,10 @@ onConfirm(value: boolean) &#123;
 
   <section id="how-it-works" class="flow-section" aria-labelledby="flow-title">
     <div class="section-heading">
-      <h2 id="flow-title">How it works</h2>
-      <p>Simple idea, reliable pattern.</p>
+      <h2 id="flow-title">Declared once. Called from anywhere.</h2>
+      <p>
+        The host lives in your Angular tree. The call happens wherever your flow needs an answer.
+      </p>
     </div>
 
     <div class="flow-grid">
@@ -157,7 +181,7 @@ onConfirm(value: boolean) &#123;
       <article>
         <span>4</span>
         <h3>Resolve</h3>
-        <p>The component ends the call with the value the original flow awaits.</p>
+        <p>The component ends the call with the value the calling flow awaits.</p>
       </article>
     </div>
   </section>
@@ -207,7 +231,7 @@ if (answer) &#123;
   <section id="stack" class="stack-section" aria-labelledby="stack-title">
     <div class="section-heading">
       <h2 id="stack-title">Live stack demo</h2>
-      <p>Open calls, update them, and see how the shared host behaves.</p>
+      <p>Open calls, update them, and see how the shared Angular host behaves.</p>
     </div>
 
     <div class="stack-layout">
@@ -239,6 +263,10 @@ if (answer) &#123;
               <dt>Host</dt>
               <dd>Shared render outlet</dd>
             </div>
+            <div>
+              <dt>UI layer</dt>
+              <dd>Custom Tailwind</dd>
+            </div>
           </dl>
         </div>
       </div>
@@ -265,14 +293,14 @@ if (answer) &#123;
 
   <section class="cta-section" aria-labelledby="cta-title">
     <div>
-      <h2 id="cta-title">Ready to await your UI?</h2>
+      <h2 id="cta-title">Ready to make Angular UI awaitable?</h2>
       <p>Install ngx-call and turn modal, toast, and flow components into promises.</p>
     </div>
     <div class="cta-actions">
-      <a class="button primary" href="#top">Get started</a>
+      <a class="button primary" href="#top">Install</a>
       <a
         class="button secondary"
-        href="https://github.com/desko27/ngx-call"
+        href="https://github.com/design4pro/ngx-call"
         rel="noreferrer"
         target="_blank"
       >
