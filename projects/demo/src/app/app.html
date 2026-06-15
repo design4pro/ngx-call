@@ -62,8 +62,11 @@
 
   <section id="examples" class="examples-section" aria-labelledby="examples-title">
     <div class="section-heading">
-      <h2 id="examples-title">Any component can return a value</h2>
-      <p>Open UI from a handler, await the answer, and keep the rendering host separate.</p>
+      <h2 id="examples-title">21 awaitable UI examples</h2>
+      <p>
+        Dialog, picker, notification, menu, drawer, overlay, and flow examples using Angular
+        components.
+      </p>
     </div>
 
     <div class="code-compare" aria-label="Code comparison">
@@ -93,34 +96,40 @@ onConfirm(value: boolean) &#123;
       </article>
     </div>
 
-    <div class="example-grid">
-      <article class="feature-card">
-        <span class="feature-icon emerald" aria-hidden="true">C</span>
-        <h3>Declared once. Called from anywhere.</h3>
-        <p>Register a component as callable and open it from a component, service, or guard.</p>
-        <button type="button" class="inline-action" (click)="askForConfirmation()">
-          Open confirm
+    <div class="filter-row" aria-label="Example filters">
+      @for (filter of filters; track filter) {
+        <button
+          type="button"
+          class="filter-chip"
+          [class.active]="selectedFilter() === filter"
+          (click)="selectedFilter.set(filter)"
+        >
+          {{ filter }}
         </button>
-      </article>
-
-      <article class="feature-card">
-        <span class="feature-icon violet" aria-hidden="true">T</span>
-        <h3>One async handler. One answer.</h3>
-        <p>The component resolves a single value and closes without output wiring.</p>
-        <button type="button" class="inline-action" (click)="showSingletonToast()">
-          Upsert toast
-        </button>
-      </article>
-
-      <article class="feature-card">
-        <span class="feature-icon amber" aria-hidden="true">S</span>
-        <h3>Many calls. One host.</h3>
-        <p>Queue, update, and stack calls while one host renders the active UI.</p>
-        <button type="button" class="inline-action" (click)="showProgressToast()">
-          Update in flight
-        </button>
-      </article>
+      }
     </div>
+
+    <div class="example-catalog">
+      @for (example of visibleExamples(); track example.id) {
+        <article class="example-card">
+          <div class="example-card-top">
+            <span class="category-label">{{ example.category }}</span>
+            <div class="behavior-list" aria-label="Behaviors">
+              @for (behavior of example.behaviors; track behavior) {
+                <span>{{ behavior }}</span>
+              }
+            </div>
+          </div>
+          <h3>{{ example.title }}</h3>
+          <p>{{ example.description }}</p>
+          <button type="button" class="inline-action" (click)="runExample(example.id, $event)">
+            {{ example.action }}
+          </button>
+        </article>
+      }
+    </div>
+
+    <p class="example-count">{{ visibleExamples().length }} of {{ examples.length }} examples</p>
   </section>
 
   <section id="how-it-works" class="flow-section" aria-labelledby="flow-title">
@@ -274,5 +283,21 @@ if (answer) &#123;
 </main>
 
 <ngx-call-host [callable]="Confirm" [root]="root()" />
+<ngx-call-host [callable]="Alert" [root]="root()" />
+<ngx-call-host [callable]="Prompt" [root]="root()" />
+<ngx-call-host [callable]="Nested" [root]="root()" />
 <ngx-call-host [callable]="Toast" [root]="root()" />
+<ngx-call-host [callable]="AutoError" [root]="root()" />
 <ngx-call-host [callable]="MutationConfirm" [root]="root()" />
+<ngx-call-host [callable]="OptionalConfirm" [root]="root()" />
+<ngx-call-host [callable]="AccountDialogCall" [root]="root()" />
+<ngx-call-host [callable]="ItemPicker" [root]="root()" />
+<ngx-call-host [callable]="ColorPicker" [root]="root()" />
+<ngx-call-host [callable]="ContextMenu" [root]="root()" />
+<ngx-call-host [callable]="CommandPalette" [root]="root()" />
+<ngx-call-host [callable]="BottomSheet" [root]="root()" />
+<ngx-call-host [callable]="SettingsDrawer" [root]="root()" />
+<ngx-call-host [callable]="Lightbox" [root]="root()" />
+<ngx-call-host [callable]="Wizard" [root]="root()" />
+<ngx-call-host [callable]="Permission" [root]="root()" />
+<ngx-call-host [callable]="Approval" [root]="root()" />

@@ -21,6 +21,9 @@ describe('App', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toContain('ngx-call');
     expect(compiled.textContent).toContain('Open confirm');
+    expect(compiled.textContent).toContain('21 of 21 examples');
+    expect(compiled.textContent).toContain('Command palette');
+    expect(compiled.textContent).toContain('Image lightbox');
     expect(compiled.textContent).toContain('Mutation flow');
   });
 });
